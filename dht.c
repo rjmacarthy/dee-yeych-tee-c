@@ -87,11 +87,11 @@ void dht_free_node(struct Node *node)
 
 uint32_t dht_xor_distance(const uint8_t *id1, const uint8_t *id2)
 {
-    uint32_t distance = 0; // Change the return type to uint32_t to avoid overflow
+    uint32_t distance = 0;
     for (int i = 0; i < ID_SIZE; i++)
     {
         distance |= ((uint32_t)(id1[i] ^ id2[i])) << (8 * (ID_SIZE - i - 1));
-        printf("Iteration %d: Distance = 0x%08X\n", i, distance); // Print intermediate distance
+        printf("Iteration %d: Distance = 0x%08X\n", i, distance);
     }
     printf("Final distance: 0x%08X\n", distance);
     return distance;
@@ -99,7 +99,7 @@ uint32_t dht_xor_distance(const uint8_t *id1, const uint8_t *id2)
 
 struct Node *node_connect(const char *bootstrap_node_address)
 {
-    struct Node *node = malloc(sizeof(struct Node)); // instantiate a new Node object
+    struct Node *node = malloc(sizeof(struct Node));
     if (node == NULL)
     {
         perror("malloc");
