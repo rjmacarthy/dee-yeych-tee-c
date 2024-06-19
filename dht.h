@@ -8,10 +8,10 @@
 #define NODE_H
 #define MAX_BUCKET_SIZE 8
 #define MAX_BOOTSTRAP_NODES 10
-#define ID_SIZE 4
+#define ID_SIZE 20
 #define UINT160_MAX ((uint160_t) -1) 
 
-typedef uint8_t uint160_t[20];
+typedef unsigned char uint160_t[20];
 
 struct DHT
 {
@@ -20,17 +20,24 @@ struct DHT
     int bucket_size; 
     int *keys;
     int *values;
+    struct Bucket *buckets[];
+};
+
+struct Bucket
+{
+    int num_nodes;  
     struct Node **nodes;
 };
 
 struct Node
 {
-    uint8_t id[ID_SIZE];
+    uint160_t id;
     char host[INET6_ADDRSTRLEN];
     int port;
     time_t lastSeen;
     int rtt;
 };
+
 
 
 struct DHT *dht_init(int num_buckets, int bucket_size);
@@ -41,14 +48,14 @@ void dht_print(struct DHT *dht);
 
 void dht_insert(struct DHT *dht, struct Node *node);
 
-uint32_t dht_xor_distance(const uint8_t *id1, const uint8_t *id2);
+uint32_t dht_xor_distance(const uint160_t *id1, const uint160_t *id2);
 
-void dht_generate_node_id(uint8_t *id, const char *host, int port);
+void dht_generate_node_id(uint160_t *id, const char *host, int port);
 
 void dht_free_node(struct Node *node);
 
 void dht_free(struct DHT *dht);
 
-uint32_t dht_calculate_hash(const uint8_t *data);
+void dht_calculate_hash(const uint8_t *data, uint160_t *hash);
 
 #endif
